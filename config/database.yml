@@ -23,7 +23,10 @@ default: &default
 
 development:
   <<: *default
-  database: managex_backend_development
+  database: managex_dev
+  username: postgres
+  password: Bubuka777
+
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
