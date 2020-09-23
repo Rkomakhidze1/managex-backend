@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
     def home
-        render html: 'hello from managex'
+        render json: {success: true, data: 'hello from managex'}
     end
 end
 
