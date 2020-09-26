@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  block: 
+  number: 
+  space: 
+  price: 
+  is_sold: false
+  reserved: false
+
+two:
+  block: 
+  number: 
+  space: 
+  price: 
+  is_sold: false
+  reserved: false

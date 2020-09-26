@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contract_start_date: 
+  contract_end_date: 
+  is_active: false
+  completed: false
+  payment_type: MyString
+  in_advance_payment: 1
+  apartment_space_sum: 1
+  parking_space_sum: 1
+  apartment_price_sum: 1
+  parking_price_sum: 1
+  full_price_sum: 1
+
+two:
+  contract_start_date: 
+  contract_end_date: 
+  is_active: false
+  completed: false
+  payment_type: MyString
+  in_advance_payment: 1
+  apartment_space_sum: 1
+  parking_space_sum: 1
+  apartment_price_sum: 1
+  parking_price_sum: 1
+  full_price_sum: 1
