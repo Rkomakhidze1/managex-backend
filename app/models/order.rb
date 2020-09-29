@@ -4,4 +4,6 @@ class Order < ApplicationRecord
     belongs_to :project
     has_many :apartments
     has_many :parkings 
+    has_one :client
+    has_one :user
 end
