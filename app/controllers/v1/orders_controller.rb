@@ -41,6 +41,12 @@ class V1::OrdersController < ApplicationController
         order.save
         render json: {order: order}, status: :created
     end
+    
+    def get
+        project = Project.find order_params[:project_id]
+        orders = project.orders
+        render json: {success: true, orders: orders}, status: :ok
+    end
 
     private
 
