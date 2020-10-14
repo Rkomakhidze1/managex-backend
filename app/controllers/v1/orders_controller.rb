@@ -1,5 +1,5 @@
 class V1::OrdersController < ApplicationController
-    before_action :authorized
+    # before_action :authorized
         
     def create
         client = Client.new client_params
@@ -47,8 +47,6 @@ class V1::OrdersController < ApplicationController
         render json: {success: true, orders: orders}, status: :ok
     end
 
-    def get 
-    end
 
     private
 
