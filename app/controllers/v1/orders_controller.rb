@@ -15,7 +15,6 @@ class V1::OrdersController < ApplicationController
             apart.reserved = true 
             apart
         end
-        byebug
         apartment_price_sum = apartments.reduce(0) {|sum, obj| sum + obj.price}
         apartment_space_sum = apartments.reduce(0) {|sum, obj| sum + obj.space}
         end
@@ -40,6 +39,12 @@ class V1::OrdersController < ApplicationController
         order.full_price_sum = apartment_price_sum + parking_price_sum
         order.save
         render json: {order: order}, status: :created
+    end
+    
+    def get
+        project = Project.find order_params[:project_id]
+        orders = project.orders
+        render json: {success: true, orders: orders}, status: :ok
     end
 
     def get 
