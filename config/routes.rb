@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     post "orders", to: 'orders#create'
     get "orders", to: 'orders#get'
     #apartments
-    post "apartments", to: 'apartments#get'
+    post "getApartments", to: 'apartments#get'
   end
   root "application#home"
 end

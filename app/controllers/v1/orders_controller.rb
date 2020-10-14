@@ -15,7 +15,6 @@ class V1::OrdersController < ApplicationController
             apart.reserved = true 
             apart
         end
-        byebug
         apartment_price_sum = apartments.reduce(0) {|sum, obj| sum + obj.price}
         apartment_space_sum = apartments.reduce(0) {|sum, obj| sum + obj.space}
         end
