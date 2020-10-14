@@ -42,6 +42,9 @@ class V1::OrdersController < ApplicationController
         render json: {order: order}, status: :created
     end
 
+    def get 
+    end
+
     private
 
     def order_params
