@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     post "getParkings", to: 'parkings#get'
     #projects
     post "getProjects", to: 'projects#get'
+    #payment_schedules
+    post "createPaymentSchedule", to: 'payment_schedules#create'
+    post "getPaymentSchedule", to: 'payment_schedules#get'
   end
   root "application#home"
 end

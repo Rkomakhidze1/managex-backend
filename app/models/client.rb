@@ -3,6 +3,7 @@ class Client < ApplicationRecord
     has_many :apartments
     has_many :parkings
     has_many :orders
+    has_many :payment_schedules
 
     validates :id_number, presence: true, uniqueness: true, length: {minimum:11, maximim:11}
     validates :name, presence: true, length:{minimum:2, maximum:20}
