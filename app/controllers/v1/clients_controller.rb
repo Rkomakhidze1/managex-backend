@@ -9,6 +9,7 @@ class V1::ClientsController < ApplicationController
         client = Client.find params[:client_id]
         updated_schedule = update_payment_schedule client.payment_schedule, params[:payment]
         client.already_paid = client.full_payment - sum(updated_schedule)
+        client.has_to_pay = client.full_payment - client.already_paid
         client.payment_schedule = updated_schedule
         if client.save
         render json: {success: true, schedule: updated_schedule}
