@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     #payment_schedules
     post "createPaymentSchedule", to: 'payment_schedules#create'
     post "getPaymentSchedule", to: 'payment_schedules#get'
+    #clients
+    post "pay", to: 'clients#pay'
+    post "clients", to: 'clients#get'
   end
   root "application#home"
 end
