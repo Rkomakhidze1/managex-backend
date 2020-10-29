@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     post "signup", to: 'users#signup'
     post "logout", to: 'users#logout'
     #orders
-    post "orders", to: 'orders#create'
+    post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
     #apartments
     post "getApartments", to: 'apartments#get'

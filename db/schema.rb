@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_103723) do
+ActiveRecord::Schema.define(version: 2020_10_27_071533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "apartments", force: :cascade do |t|
-    t.integer "block"
-    t.integer "number"
-    t.integer "space"
-    t.integer "price"
+    t.string "block"
+    t.string "number"
+    t.decimal "space", precision: 8, scale: 2
+    t.decimal "price", precision: 8, scale: 2
     t.boolean "is_sold"
     t.boolean "reserved"
     t.datetime "created_at", precision: 6, null: false
@@ -37,10 +37,10 @@ ActiveRecord::Schema.define(version: 2020_10_19_103723) do
     t.integer "company_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "payment_schedule", default: [], array: true
-    t.integer "full_payment"
-    t.integer "already_paid"
-    t.integer "has_to_pay"
+    t.decimal "payment_schedule", precision: 8, scale: 2, default: [], array: true
+    t.decimal "full_payment", precision: 8, scale: 2
+    t.decimal "already_paid", precision: 8, scale: 2
+    t.decimal "has_to_pay", precision: 8, scale: 2
   end
 
   create_table "companies", force: :cascade do |t|
@@ -56,12 +56,12 @@ ActiveRecord::Schema.define(version: 2020_10_19_103723) do
     t.boolean "is_active"
     t.boolean "completed"
     t.string "payment_type"
-    t.integer "in_advance_payment"
-    t.integer "apartment_space_sum"
-    t.integer "parking_space_sum"
-    t.integer "apartment_price_sum"
-    t.integer "parking_price_sum"
-    t.integer "full_price_sum"
+    t.decimal "in_advance_payment", precision: 8, scale: 2
+    t.decimal "apartment_space_sum", precision: 8, scale: 2
+    t.decimal "parking_space_sum", precision: 8, scale: 2
+    t.decimal "apartment_price_sum", precision: 8, scale: 2
+    t.decimal "parking_price_sum", precision: 8, scale: 2
+    t.decimal "full_price_sum", precision: 8, scale: 2
     t.integer "user_id"
     t.integer "client_id"
     t.datetime "created_at", precision: 6, null: false
@@ -70,10 +70,10 @@ ActiveRecord::Schema.define(version: 2020_10_19_103723) do
   end
 
   create_table "parkings", force: :cascade do |t|
-    t.integer "block"
-    t.integer "number"
-    t.integer "space"
-    t.integer "price"
+    t.string "block"
+    t.string "number"
+    t.decimal "space", precision: 8, scale: 2
+    t.decimal "price", precision: 8, scale: 2
     t.boolean "is_sold"
     t.boolean "reserved"
     t.integer "project_id"
