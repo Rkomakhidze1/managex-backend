@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     #jwt token methods
     def encode_token(payload)
         JWT.encode(payload, Rails.application.secrets.secret_key_base)
-      end
+    end
     
     def auth_header
     # { Authorization: 'Bearer <token>' }
