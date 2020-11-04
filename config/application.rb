@@ -41,6 +41,5 @@ module ManagexBackend
         resource '*', headers: :any, methods: :any
       end
     end
-    Rails.application.config.hosts << ["http://localhost:3001", "managex-backend.herokuapp.com"]
   end
 end
