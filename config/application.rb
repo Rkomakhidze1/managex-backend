@@ -42,5 +42,6 @@ module ManagexBackend
       end
     end
     Rails.application.config.hosts << "http://localhost:3001"
+    Rails.application.config.hosts << "managex-backend.herokuapp.com"
   end
 end
