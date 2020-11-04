@@ -1,44 +1,61 @@
 class V1::OrdersController < ApplicationController
-    before_action :authorized
+    # before_action :authorized
         
     def create
-        client = Client.new client_params
-        client.company_id = @user.company_id
-        client.save
-
-        apartment_price_sum = 0
-        parking_price_sum = 0
+        apartment_price_sum = BigDecimal("0")
+        parking_price_sum = BigDecimal("0")
 
         if order_params[:apartment_ids]
-        apartments = Apartment.find order_params[:apartment_ids] 
-        apartments.map! do |apart|
-            apart.reserved = true 
-            apart
+            apartment_ids_arr = order_params[:apartment_ids].split(",") 
+            apartments = Apartment.find apartment_ids_arr
+            apartments.map! do |apart|
+                apart.reserved = true 
+                apart.save
+                apart
+            end
+            apartments
+            apartment_price_sum = apartments.reduce(0) {|sum, apart| sum + apart.price}
+            apartment_space_sum = apartments.reduce(0) {|sum, apart| sum + apart.space}
         end
-        apartment_price_sum = apartments.reduce(0) {|sum, obj| sum + obj.price}
-        apartment_space_sum = apartments.reduce(0) {|sum, obj| sum + obj.space}
-        end
-
         if order_params[:parking_ids]
-        parkings = Parking.find order_params[:parking_ids]
-        parkings.map! do |park|
-            park.reserved = true 
-            park
-        end 
-        parking_price_sum = parkings.reduce(0) {|sum, obj| sum + obj.price}
-        parking_space_sum = parkings.reduce(0) {|sum, obj| sum + obj.space}
+            parking_ids_arr = order_params[:parking_ids].split(",")
+            parkings = Parking.find parking_ids_arr
+            parkings.map! do |park|
+                park.reserved = true 
+                park.save
+                park
+            end 
+            parkings
+            parking_price_sum = parkings.reduce(0) {|sum, park| sum + park.price}
+            parking_space_sum = parkings.reduce(0) {|sum, park| sum + park.space}
         end
 
+        client = Client.new client_params
+        # client.company_id = @user.company_id
+        client.company_id = 1
+        client.full_payment = apartment_price_sum + parking_price_sum;
+        client.has_to_pay = apartment_price_sum + parking_price_sum;
+        client.already_paid = BigDecimal("0")
+        client.save
+        if !client.save
+            return render json: {success: false, message: client.errors.full_messages}, status: :bad_request
+        end
+        
         order = Order.new order_params
         order.client_id = client.id
-        order.user_id = @user.id
+        # order.user_id = @user.id
+        order.project_id = 2
+        order.user_id = 1
         order.apartment_price_sum = apartment_price_sum
         order.apartment_space_sum = apartment_space_sum
         order.parking_price_sum = parking_price_sum
         order.parking_space_sum = parking_space_sum
         order.full_price_sum = apartment_price_sum + parking_price_sum
-        order.save
-        render json: {order: order}, status: :created
+        if order.save
+            render json: {order: order}, status: :created
+        else
+            render json: {success: false, message: order.errors.full_messages}, status: :bad_request
+        end
     end
     
     def get
@@ -47,8 +64,6 @@ class V1::OrdersController < ApplicationController
         render json: {success: true, orders: orders}, status: :ok
     end
 
-    def get 
-    end
 
     private
 
@@ -60,8 +75,8 @@ class V1::OrdersController < ApplicationController
             :payment_type, 
             :in_advance_payment, 
             :project_id,
-            apartment_ids: [],
-            parking_ids: []
+            :apartment_ids,
+            :parking_ids
         )
     end
 
