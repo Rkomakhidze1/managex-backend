@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
+    def home
+        render html: "hello world"
+    end
+
     #jwt token methods
     def encode_token(payload)
         JWT.encode(payload, Rails.application.secrets.secret_key_base)
