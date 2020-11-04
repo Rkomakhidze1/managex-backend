@@ -7,7 +7,6 @@ class User < ApplicationRecord
                             uniqueness: {case_sensitive: false}, 
                             length:{minimum:3, maximum:30}
 
-    validates :password, presence: true, length:{minimum:5, maximum:30}
 
 
 end

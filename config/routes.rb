@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     post "login", to: 'users#login'
     post "signup", to: 'users#signup'
     post "logout", to: 'users#logout'
+    post "me", to: 'users#me'
     #orders
     post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
