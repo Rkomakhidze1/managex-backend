@@ -27,7 +27,6 @@ development:
   username: postgres
   password: Bubuka777
 
-
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
@@ -83,6 +82,6 @@ test:
 #
 production:
   <<: *default
-  database: managex_backend_production
-  username: managex_backend
-  password: <%= ENV['MANAGEX_BACKEND_DATABASE_PASSWORD'] %>
+  database: managex_prod
+  username: postgres
+  password: Bubuka777
