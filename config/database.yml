@@ -82,6 +82,6 @@ test:
 #
 production:
   <<: *default
-  database: managex_prod
-  username: postgres
-  password: Bubuka777
+  database: managex_backend_production
+  username: managex_backend
+  password: <%= ENV['MANAGEX_BACKEND_DATABASE_PASSWORD'] %>
