@@ -18,8 +18,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
   create_table "apartments", force: :cascade do |t|
     t.string "block"
     t.string "number"
-    t.decimal "space", precision: 8, scale: 2
-    t.decimal "price", precision: 8, scale: 2
+    t.decimal "space", precision: 12, scale: 2
+    t.decimal "price", precision: 12, scale: 2
     t.boolean "is_sold"
     t.boolean "reserved"
     t.datetime "created_at", precision: 6, null: false
@@ -38,9 +38,9 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "payment_schedule", precision: 8, scale: 2, default: [], array: true
-    t.decimal "full_payment", precision: 8, scale: 2
-    t.decimal "already_paid", precision: 8, scale: 2
-    t.decimal "has_to_pay", precision: 8, scale: 2
+    t.decimal "full_payment", precision: 12, scale: 2
+    t.decimal "already_paid", precision: 12, scale: 2
+    t.decimal "has_to_pay", precision: 12, scale: 2
   end
 
   create_table "companies", force: :cascade do |t|
@@ -56,12 +56,12 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
     t.boolean "is_active"
     t.boolean "completed"
     t.string "payment_type"
-    t.decimal "in_advance_payment", precision: 8, scale: 2
-    t.decimal "apartment_space_sum", precision: 8, scale: 2
-    t.decimal "parking_space_sum", precision: 8, scale: 2
-    t.decimal "apartment_price_sum", precision: 8, scale: 2
-    t.decimal "parking_price_sum", precision: 8, scale: 2
-    t.decimal "full_price_sum", precision: 8, scale: 2
+    t.decimal "in_advance_payment", precision: 12, scale: 2
+    t.decimal "apartment_space_sum", precision: 12, scale: 2
+    t.decimal "parking_space_sum", precision: 12, scale: 2
+    t.decimal "apartment_price_sum", precision: 12, scale: 2
+    t.decimal "parking_price_sum", precision: 12, scale: 2
+    t.decimal "full_price_sum", precision: 12, scale: 2
     t.integer "user_id"
     t.integer "client_id"
     t.datetime "created_at", precision: 6, null: false
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
   create_table "parkings", force: :cascade do |t|
     t.string "block"
     t.string "number"
-    t.decimal "space", precision: 8, scale: 2
-    t.decimal "price", precision: 8, scale: 2
+    t.decimal "space", precision: 12, scale: 2
+    t.decimal "price", precision: 12, scale: 2
     t.boolean "is_sold"
     t.boolean "reserved"
     t.integer "project_id"
@@ -95,10 +95,10 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "company_id"
-    t.decimal "apartment_spaces", precision: 8, scale: 2
-    t.decimal "parking_spaces", precision: 8, scale: 2
-    t.decimal "budget", precision: 8, scale: 2
-    t.decimal "income_expected", precision: 8, scale: 2
+    t.decimal "apartment_spaces", precision: 12, scale: 2
+    t.decimal "parking_spaces", precision: 12, scale: 2
+    t.decimal "budget", precision: 12, scale: 2
+    t.decimal "income_expected", precision: 12, scale: 2
   end
 
   create_table "users", force: :cascade do |t|
