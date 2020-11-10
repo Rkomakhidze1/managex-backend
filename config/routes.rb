@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   namespace :v1 do
+    # projects
+    post "getProject", to: 'projects#get'
     #users
     post "login", to: 'users#login'
     post "signup", to: 'users#signup'
