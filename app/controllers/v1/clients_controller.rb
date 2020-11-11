@@ -10,8 +10,7 @@ class V1::ClientsController < ApplicationController
         updated_schedule = update_payment_schedule client.payment_schedule, BigDecimal(schedule_params[:payment])
         already_paid = client.full_payment - sum(updated_schedule)
         client.already_paid = already_paid
-        has_to_pay = client.full_payment - client.already_paid
-        client.has_to_pay = has_to_pay
+        client.has_to_pay = client.full_payment - client.already_paid
         client.payment_schedule = updated_schedule
         if client.save
             render json: {success: true, schedule: updated_schedule}
