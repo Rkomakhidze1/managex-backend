@@ -5,6 +5,56 @@ class V1::ClientsController < ApplicationController
         render json:{success: true, clients: clients}, status: :ok
     end
 
+    def show_payments_monthly
+        clients = Client.all
+        payments_json = clients.map {|c| c.payment_dates} 
+        payments = payments_json.map {|p| p.map {|d| JSON.parse d}}
+        monthly_statistics = []
+        12.times do |i|
+            month_arr = payments.map do |arr|
+                arr.filter {|p| p.keys[0].split("-")[1].to_i == (i + 1)}
+            end
+            if month_arr.include? [] && month_arr.uniq.size <= 1
+                monthly_statistics.push 0
+                next
+            end
+            months = []
+            month_arr.map {|a| a.map {|i| months.push i}}
+            decimal_arr = months.map {|item| BigDecimal(item.values()[0])}
+            sum = sum(decimal_arr)
+            monthly_statistics.push sum
+        end 
+        render json:{success: true, monthly: monthly_statistics}, status: :ok
+    end
+
+    def show_payments_daily
+        clients = Client.all
+        payments_json = clients.map {|c| c.payment_dates} 
+        payments = payments_json.map {|p| p.map {|d| JSON.parse d}}
+        daily_statistics = []
+        month_arr = payments.map do |arr|
+            arr.filter {|p| p.keys[0].split("-")[1].to_i == (params[:month])}
+        end
+        # byebug
+        month = []
+        month_arr.map {|a| a.map {|b| month.push b}}
+        first = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(1, 5)} 
+        second = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(6, 10)}
+        third = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(11, 15)}
+        fourth = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(16, 20)}
+        fifth = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(21, 25)}
+        sixth = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(25, 31)}
+        arr = [
+            first == [] ? 0 : sum(first.map {|a| BigDecimal(a.values()[0])}),
+            second == [] ? 0 : sum(second.map {|a| BigDecimal(a.values()[0])}),
+            third == [] ? 0 : sum(third.map {|a| BigDecimal(a.values()[0])}),
+            fourth == [] ? 0 : sum(fourth.map {|a| BigDecimal(a.values()[0])}),
+            fifth == [] ? 0 : sum(fifth.map {|a| BigDecimal(a.values()[0])}),
+            sixth == [] ? 0 : sum(sixth.map {|a| BigDecimal(a.values()[0])}),
+        ]
+        render json:{success: true, daily: arr}, status: :ok 
+    end
+
     def pay
         date = Time.now.to_s
         today = date.split()[0]
