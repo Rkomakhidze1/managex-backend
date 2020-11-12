@@ -2,8 +2,8 @@ class V1::ProjectsController < ApplicationController
     # before_action :authorized
 
     def get
-        projects = Project.find project_params[:project_id]
-        render json: {success: true, projects: projects}, status: :ok
+        project = Project.find project_params[:project_id]
+        render json: {success: true, project: project}, status: :ok
     end
 
     private 
