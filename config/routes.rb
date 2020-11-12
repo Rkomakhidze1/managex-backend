@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     #clients
     post "pay", to: 'clients#pay'
     post "clients", to: 'clients#get'
+    post "statisticsMonthly", to: 'clients#show_payments_monthly'
+    post "statisticsDaily", to: 'clients#show_payments_daily'
   end
   root "application#home"
 end
