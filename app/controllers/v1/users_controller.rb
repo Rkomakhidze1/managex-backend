@@ -45,6 +45,10 @@ class V1::UsersController < ApplicationController
         render json: {success: true, user: @user}, status: :ok
     end
 
+    def test
+        render json: {success: true, user: "test passed!"}, status: :ok
+    end
+
     private
 
     def user_params

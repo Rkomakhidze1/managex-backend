@@ -1,9 +1,13 @@
 class ApplicationController < ActionController::API
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
+    def home
+        render html: "hello world"
+    end
+
     #jwt token methods
     def encode_token(payload)
-        JWT.encode(payload, Rails.application.secrets.secret_key_base)
+        JWT.encode(payload, "Rails.application.secrets.secret_key_base")
     end
     
     def auth_header
@@ -16,7 +20,7 @@ class ApplicationController < ActionController::API
         @token = auth_header.split(' ')[1]
         # header: { 'Authorization': 'Bearer <token>' }
         begin
-        JWT.decode(@token, Rails.application.secrets.secret_key_base, true, algorithm: 'HS256')
+        JWT.decode(@token, "Rails.application.secrets.secret_key_base", true, algorithm: 'HS256')
         rescue JWT::DecodeError
         nil
         end
@@ -35,7 +39,7 @@ class ApplicationController < ActionController::API
     end
 
     def authorized
-    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+    render json: { message: 'Please log in' }, status: :unauthorized if !logged_in? 
     end
 
     #error handlers

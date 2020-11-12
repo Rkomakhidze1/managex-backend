@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   namespace :v1 do
+    # projects
+    post "getProject", to: 'projects#get'
     #users
     post "login", to: 'users#login'
     post "signup", to: 'users#signup'
     post "logout", to: 'users#logout'
     post "me", to: 'users#me'
+    post "test", to: 'users#test'
     #orders
     post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
@@ -20,6 +23,8 @@ Rails.application.routes.draw do
     #clients
     post "pay", to: 'clients#pay'
     post "clients", to: 'clients#get'
+    post "statisticsMonthly", to: 'clients#show_payments_monthly'
+    post "statisticsDaily", to: 'clients#show_payments_daily'
   end
   root "application#home"
 end

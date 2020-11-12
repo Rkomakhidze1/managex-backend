@@ -44,7 +44,7 @@ class V1::OrdersController < ApplicationController
         order = Order.new order_params
         order.client_id = client.id
         # order.user_id = @user.id
-        order.project_id = 2
+        order.project_id = order_params[:project_id]
         order.user_id = 1
         order.apartment_price_sum = apartment_price_sum
         order.apartment_space_sum = apartment_space_sum
