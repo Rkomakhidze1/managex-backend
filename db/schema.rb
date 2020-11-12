@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_155832) do
+ActiveRecord::Schema.define(version: 2020_11_11_072542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_11_02_155832) do
     t.decimal "full_payment", precision: 12, scale: 2
     t.decimal "already_paid", precision: 12, scale: 2
     t.decimal "has_to_pay", precision: 12, scale: 2
+    t.json "payment_dates", default: []
   end
 
   create_table "companies", force: :cascade do |t|
