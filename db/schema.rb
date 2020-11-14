@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_072542) do
+ActiveRecord::Schema.define(version: 2020_11_13_191813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,24 +34,14 @@ ActiveRecord::Schema.define(version: 2020_11_11_072542) do
     t.string "surname"
     t.string "id_number"
     t.string "phone_number"
-    t.integer "company_id"
+    t.integer "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "payment_schedule", precision: 8, scale: 2, default: [], array: true
     t.decimal "full_payment", precision: 12, scale: 2
     t.decimal "already_paid", precision: 12, scale: 2
     t.decimal "has_to_pay", precision: 12, scale: 2
-<<<<<<< HEAD
-=======
     t.json "payment_dates", default: []
->>>>>>> e53baa38011148417235072db2339dfe480f18e2
-  end
-
-  create_table "companies", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "secret"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -103,6 +93,7 @@ ActiveRecord::Schema.define(version: 2020_11_11_072542) do
     t.decimal "parking_spaces", precision: 12, scale: 2
     t.decimal "budget", precision: 12, scale: 2
     t.decimal "income_expected", precision: 12, scale: 2
+    t.decimal "already_paid", precision: 12, scale: 2, default: "0.0"
   end
 
   create_table "users", force: :cascade do |t|
@@ -112,7 +103,6 @@ ActiveRecord::Schema.define(version: 2020_11_11_072542) do
     t.string "tokens", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "company_id"
   end
 
 end

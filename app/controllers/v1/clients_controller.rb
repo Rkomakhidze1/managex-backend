@@ -1,7 +1,7 @@
 class V1::ClientsController < ApplicationController
 
     def get
-        clients = Client.where company_id: schedule_params[:company_id]
+        clients = Client.where project_id: schedule_params[:project_id]
         render json:{success: true, clients: clients}, status: :ok
     end
 
@@ -67,17 +67,22 @@ class V1::ClientsController < ApplicationController
         client.has_to_pay = client.full_payment - client.already_paid
         client.payment_schedule = updated_schedule
 
+        project = Project.find params[:project_id]
+        project.already_paid += BigDecimal(schedule_params[:payment])
+        project.save
+        return render json: {success: false, message: err_msg(project)} if !project.save
+
         if client.save
-            render json: {success: true, schedule: updated_schedule}
+            render json: {success: true, schedule: updated_schedule}, status: :ok
         else
-            render json: {success: false, data: client.errors.full_messages}
+            render json: {success: false, message: err_msg(client)}, status: :bad_request
         end
     end 
 
     private
 
     def schedule_params
-        params.permit(:client_id, :payment, :company_id)
+        params.permit(:client_id, :payment, :project_id)
     end
 
     def update_payment_schedule(current_schedule, payment)

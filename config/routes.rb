@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     # projects
     post "getProject", to: 'projects#get'
+    post "getAlreadyPaid", to: 'projects#get_alredy_paid'
     #users
     post "login", to: 'users#login'
     post "signup", to: 'users#signup'

@@ -31,21 +31,17 @@ class V1::OrdersController < ApplicationController
         end
 
         client = Client.new client_params
-        # client.company_id = @user.company_id
-        client.company_id = 1
         client.full_payment = apartment_price_sum + parking_price_sum;
         client.has_to_pay = apartment_price_sum + parking_price_sum;
         client.already_paid = BigDecimal("0")
         client.save
         if !client.save
-            return render json: {success: false, message: client.errors.full_messages}, status: :bad_request
+            return render json: {success: false, message:  err_msg(client)}, status: :bad_request
         end
         
         order = Order.new order_params
         order.client_id = client.id
-        # order.user_id = @user.id
-        order.project_id = order_params[:project_id]
-        order.user_id = 1
+        order.user_id = @user.id
         order.apartment_price_sum = apartment_price_sum
         order.apartment_space_sum = apartment_space_sum
         order.parking_price_sum = parking_price_sum
@@ -54,7 +50,7 @@ class V1::OrdersController < ApplicationController
         if order.save
             render json: {order: order}, status: :created
         else
-            render json: {success: false, message: order.errors.full_messages}, status: :bad_request
+            render json: {success: false, message: err_msg(order)}, status: :bad_request
         end
     end
     
@@ -81,7 +77,7 @@ class V1::OrdersController < ApplicationController
     end
 
     def client_params
-        params.permit(:name, :surname, :phone_number, :id_number)
+        params.permit(:name, :surname, :phone_number, :id_number, :project_id)
     end
 end
 
