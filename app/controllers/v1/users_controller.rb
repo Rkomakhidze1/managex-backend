@@ -1,24 +1,6 @@
 class V1::UsersController < ApplicationController
-    before_action :authorized, only: [:logout, :me]
-
-    def signup
-        company = Company.find_by! name: company_params[:company_name]
-        if company.secret == company_params[:company_secret_key]
-            user = User.new user_params
-            user.company_id = company.id
-            if user.save
-                render json: {success: true, user: user}, status: :created
-            else
-                render json: {success: false, error: user.errors.full_messages}, status: :bad_request
-            end
-        else
-            render json: {success: false, message: "company secret does not match"}, status: :bad_request
-    end
-        
-    end
+    before_action :authorized, only: [:logout, :me, :get_clients]
     
-
-
     def login
         user = User.find_by! username: user_params[:username]
         if user.authenticate user_params[:password]
@@ -45,17 +27,16 @@ class V1::UsersController < ApplicationController
         render json: {success: true, user: @user}, status: :ok
     end
 
-    def test
-        render json: {success: true, user: "test passed!"}, status: :ok
+    def get_clients
+        all_clients = @user.orders.map {|o| Client.find o.client_id}
+        clients = all_clients.filter {|c| c.project_id == user_params[:project_id]}
+        render json: {success: true, clients: clients }, status: :ok
     end
 
     private
 
     def user_params
-        params.permit(:password, :username, :email)
+        params.permit(:password, :username, :email, :project_id)
     end
 
-    def company_params
-        params.permit(:company_name, :company_secret_key)
-    end
 end

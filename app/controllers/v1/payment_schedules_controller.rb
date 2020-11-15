@@ -1,4 +1,6 @@
 class V1::PaymentSchedulesController < ApplicationController
+    before_action :authorized
+
     def create
         # add column needed
         client = Client.find schedule_params[:client_id]
@@ -10,7 +12,7 @@ class V1::PaymentSchedulesController < ApplicationController
         client.payment_schedule = Array.new amount_of_months, monthly_payment 
         client.save
         if !client.save 
-            render json: {success: false, message: client.errors.full_messages}
+            render json: {success: false, message: err_msg(client)}
         end
 
         date = Date.parse(schedule_params[:start_date])
@@ -21,7 +23,7 @@ class V1::PaymentSchedulesController < ApplicationController
         if payment_schedule.save
             render json: {success: true, message: "schedule saved successfully"}
         else
-            render json: {success: false, error: payment_schedule.errors.full_messages}
+            render json: {success: false, error: err_msg(payment_schedule)}
         end
     end
 

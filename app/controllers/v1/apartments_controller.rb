@@ -1,5 +1,5 @@
 class V1::ApartmentsController < ApplicationController
-    # before_action :authorized
+    before_action :authorized
 
     def get
         project = Project.find apartment_params[:project_id]

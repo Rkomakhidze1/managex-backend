@@ -48,6 +48,10 @@ class ApplicationController < ActionController::API
     def not_found(e) 
         render json:{success: false, message: e}, status: :not_found
     end
+
+    def err_msg(val)
+        val.errors.full_messages
+    end
 end
 
 
