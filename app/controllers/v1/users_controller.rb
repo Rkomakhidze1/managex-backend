@@ -28,14 +28,15 @@ class V1::UsersController < ApplicationController
     end
 
     def get_clients
-        clients = @user.orders.map {|o| Client.find o.client_id}
+        all_clients = @user.orders.map {|o| Client.find o.client_id}
+        clients = all_clients.filter {|c| c.project_id == user_params[:project_id]}
         render json: {success: true, clients: clients }, status: :ok
     end
 
     private
 
     def user_params
-        params.permit(:password, :username, :email)
+        params.permit(:password, :username, :email, :project_id)
     end
 
 end

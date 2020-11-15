@@ -61,6 +61,9 @@ class V1::ClientsController < ApplicationController
         today = date.split()[0]
 
         client = Client.find client_params[:client_id]
+        if client.payment_schedule.length == 0
+            return render json:{success: false, message:"payment schedule does not exist"}, status: :bad_request 
+        end
         updated_schedule = update_payment_schedule client.payment_schedule, BigDecimal(client_params[:payment])
         payment_date_hash = {today => client_params[:payment]}
         client.payment_dates.push payment_date_hash.to_json 
