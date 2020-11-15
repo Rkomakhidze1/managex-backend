@@ -1,5 +1,5 @@
 class V1::ParkingsController < ApplicationController
-    # before_action :authorized
+    before_action :authorized
 
     def get
         project = Project.find parking_params[:project_id]
