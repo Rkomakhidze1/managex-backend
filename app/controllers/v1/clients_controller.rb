@@ -1,12 +1,13 @@
 class V1::ClientsController < ApplicationController
+    before_action :authorized
 
     def get
-        clients = Client.where project_id: schedule_params[:project_id]
+        clients = Client.where project_id: client_params[:project_id]
         render json:{success: true, clients: clients}, status: :ok
     end
 
     def show_payments_monthly
-        clients = Client.all
+        clients = Client.where(project_id: client_params[:project_id])
         payments_json = clients.map {|c| c.payment_dates} 
         payments = payments_json.map {|p| p.map {|d| JSON.parse d}}
         monthly_statistics = []
@@ -28,7 +29,7 @@ class V1::ClientsController < ApplicationController
     end
 
     def show_payments_daily
-        clients = Client.all
+        clients = Client.where(project_id: client_params[:project_id])
         payments_json = clients.map {|c| c.payment_dates} 
         payments = payments_json.map {|p| p.map {|d| JSON.parse d}}
         daily_statistics = []
@@ -59,16 +60,16 @@ class V1::ClientsController < ApplicationController
         date = Time.now.to_s
         today = date.split()[0]
 
-        client = Client.find schedule_params[:client_id]
-        updated_schedule = update_payment_schedule client.payment_schedule, BigDecimal(schedule_params[:payment])
-        payment_date_hash = {today => schedule_params[:payment]}
+        client = Client.find client_params[:client_id]
+        updated_schedule = update_payment_schedule client.payment_schedule, BigDecimal(client_params[:payment])
+        payment_date_hash = {today => client_params[:payment]}
         client.payment_dates.push payment_date_hash.to_json 
         client.already_paid = client.full_payment - sum(updated_schedule)
         client.has_to_pay = client.full_payment - client.already_paid
         client.payment_schedule = updated_schedule
 
         project = Project.find params[:project_id]
-        project.already_paid += BigDecimal(schedule_params[:payment])
+        project.already_paid += BigDecimal(client_params[:payment])
         project.save
         return render json: {success: false, message: err_msg(project)} if !project.save
 
@@ -81,7 +82,7 @@ class V1::ClientsController < ApplicationController
 
     private
 
-    def schedule_params
+    def client_params
         params.permit(:client_id, :payment, :project_id)
     end
 

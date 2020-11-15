@@ -1,5 +1,5 @@
 class V1::OrdersController < ApplicationController
-    # before_action :authorized
+    before_action :authorized
         
     def create
         apartment_price_sum = BigDecimal("0")
@@ -10,10 +10,8 @@ class V1::OrdersController < ApplicationController
             apartments = Apartment.find apartment_ids_arr
             apartments.map! do |apart|
                 apart.reserved = true 
-                apart.save
                 apart
             end
-            apartments
             apartment_price_sum = apartments.reduce(0) {|sum, apart| sum + apart.price}
             apartment_space_sum = apartments.reduce(0) {|sum, apart| sum + apart.space}
         end
@@ -22,10 +20,8 @@ class V1::OrdersController < ApplicationController
             parkings = Parking.find parking_ids_arr
             parkings.map! do |park|
                 park.reserved = true 
-                park.save
                 park
             end 
-            parkings
             parking_price_sum = parkings.reduce(0) {|sum, park| sum + park.price}
             parking_space_sum = parkings.reduce(0) {|sum, park| sum + park.space}
         end
@@ -48,6 +44,8 @@ class V1::OrdersController < ApplicationController
         order.parking_space_sum = parking_space_sum
         order.full_price_sum = apartment_price_sum + parking_price_sum
         if order.save
+            apartments && apartments.each {|a| a.save}
+            parkings && parkings.each {|a| a.save}
             render json: {order: order}, status: :created
         else
             render json: {success: false, message: err_msg(order)}, status: :bad_request

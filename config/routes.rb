@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post "logout", to: 'users#logout'
     post "me", to: 'users#me'
     post "test", to: 'users#test'
+    post "getClientsForUser", to: 'users#get_clients'
     #orders
     post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
@@ -16,14 +17,13 @@ Rails.application.routes.draw do
     post "getApartments", to: 'apartments#get'
     #parkings
     post "getParkings", to: 'parkings#get'
-    #projects
-    post "getProjects", to: 'projects#get'
     #payment_schedules
     post "createPaymentSchedule", to: 'payment_schedules#create'
     post "getPaymentSchedule", to: 'payment_schedules#get'
     #clients
     post "pay", to: 'clients#pay'
     post "clients", to: 'clients#get'
+    #statistics
     post "statisticsMonthly", to: 'clients#show_payments_monthly'
     post "statisticsDaily", to: 'clients#show_payments_daily'
   end

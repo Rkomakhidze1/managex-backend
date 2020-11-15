@@ -1,4 +1,6 @@
 class V1::PaymentSchedulesController < ApplicationController
+    before_action :authorized
+
     def create
         # add column needed
         client = Client.find schedule_params[:client_id]

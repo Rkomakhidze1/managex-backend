@@ -1,5 +1,5 @@
 class V1::UsersController < ApplicationController
-    before_action :authorized, only: [:logout, :me]
+    before_action :authorized, only: [:logout, :me, :get_clients]
     
     def login
         user = User.find_by! username: user_params[:username]
@@ -27,8 +27,9 @@ class V1::UsersController < ApplicationController
         render json: {success: true, user: @user}, status: :ok
     end
 
-    def test
-        render json: {success: true, user: "test passed!"}, status: :ok
+    def get_clients
+        clients = @user.orders.map {|o| Client.find o.client_id}
+        render json: {success: true, clients: clients }, status: :ok
     end
 
     private
@@ -36,5 +37,5 @@ class V1::UsersController < ApplicationController
     def user_params
         params.permit(:password, :username, :email)
     end
-    
+
 end
