@@ -36,7 +36,6 @@ class V1::ClientsController < ApplicationController
         month_arr = payments.map do |arr|
             arr.filter {|p| p.keys[0].split("-")[1].to_i == (params[:month])}
         end
-        # byebug
         month = []
         month_arr.map {|a| a.map {|b| month.push b}}
         first = month.filter {|p| p.keys()[0].split("-")[2].to_i.between?(1, 5)} 
@@ -71,7 +70,7 @@ class V1::ClientsController < ApplicationController
         client.has_to_pay = client.full_payment - client.already_paid
         client.payment_schedule = updated_schedule
 
-        project = Project.find params[:project_id]
+        project = Project.find client.project_id
         project.already_paid += BigDecimal(client_params[:payment])
         project.save
         return render json: {success: false, message: err_msg(project)} if !project.save
@@ -93,10 +92,10 @@ class V1::ClientsController < ApplicationController
         return [payment] if current_schedule == []
 
         val = current_schedule.first - payment
-        if (val.round(2) == 0) 
+        if (val.round(4) == 0) 
             updated_schedule = current_schedule.drop 1
             updated_schedule
-        elsif(val.round(2) < 0)
+        elsif(val.round(4) < 0)
             updated_schedule = current_schedule.drop 1
             update_payment_schedule(updated_schedule, val.round(2).abs)
         else
