@@ -22,7 +22,7 @@ class V1::OrdersController < ApplicationController
         if order_params[:parking_ids].length > 0
             parking_ids_arr = order_params[:parking_ids].split(",")
             parkings_all = Parking.find parking_ids_arr
-            parkings = parkings_all.filter {|a| a.project_id == order_params[:project_id]}
+            parkings = parkings_all.filter {|a| a.project_id == order_params[:project_id].to_i}
             if parkings.length == 0
                 return render json: {success: false, messgae:"parking does not belong to the project"}, status: :bad_request 
             end
