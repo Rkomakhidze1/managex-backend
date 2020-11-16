@@ -5,9 +5,13 @@ class V1::OrdersController < ApplicationController
         apartment_price_sum = BigDecimal("0")
         parking_price_sum = BigDecimal("0")
 
-        if order_params[:apartment_ids]
+        if order_params[:apartment_ids].length > 0
             apartment_ids_arr = order_params[:apartment_ids].split(",") 
-            apartments = Apartment.find apartment_ids_arr
+            apartments_all = Apartment.find apartment_ids_arr
+            apartments = apartments_all.filter {|a| a.project_id == order_params[:project_id].to_i}
+            if apartments.length == 0
+                return render json: {success: false, messgae:"apartment does not belong to the project"}, status: :bad_request 
+            end
             apartments.map! do |apart|
                 apart.reserved = true 
                 apart
@@ -15,9 +19,13 @@ class V1::OrdersController < ApplicationController
             apartment_price_sum = apartments.reduce(0) {|sum, apart| sum + apart.price}
             apartment_space_sum = apartments.reduce(0) {|sum, apart| sum + apart.space}
         end
-        if order_params[:parking_ids]
+        if order_params[:parking_ids].length > 0
             parking_ids_arr = order_params[:parking_ids].split(",")
-            parkings = Parking.find parking_ids_arr
+            parkings_all = Parking.find parking_ids_arr
+            parkings = parkings_all.filter {|a| a.project_id == order_params[:project_id]}
+            if parkings.length == 0
+                return render json: {success: false, messgae:"parking does not belong to the project"}, status: :bad_request 
+            end
             parkings.map! do |park|
                 park.reserved = true 
                 park
