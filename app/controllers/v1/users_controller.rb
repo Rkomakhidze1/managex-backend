@@ -1,5 +1,5 @@
 class V1::UsersController < ApplicationController
-    before_action :authorized, only: [:logout, :me, :get_clients]
+    before_action :authorized, except: [:login]
     
     def login
         user = User.find_by! username: user_params[:username]
@@ -31,6 +31,17 @@ class V1::UsersController < ApplicationController
         all_clients = @user.orders.map {|o| Client.find o.client_id}
         clients = all_clients.filter {|c| c.project_id == user_params[:project_id]}
         render json: {success: true, clients: clients }, status: :ok
+    end
+
+    def get_sales_info
+        apartments = @user.orders.filter{|o| o.apartments.count != 0 && o.project_id == params[:project_id].to_i}
+        parkings = @user.orders.filter{|o| o.parkings.count != 0 && o.project_id == params[:project_id].to_i}
+        apartment_space = apartments.map{|o| o.apartments[0].space}
+        parking_space = parkings.map{|o| o.parkings[0].space}
+        full_space_arr = apartment_space + parking_space
+        full_space = full_space_arr.reduce(0){|a, e| a + e}
+
+        render json: {success: true, parkings: parkings.count, apartments: apartments.count, full_space: full_space}
     end
 
     private
