@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     post "me", to: 'users#me'
     post "test", to: 'users#test'
     post "getClientsForUser", to: 'users#get_clients'
+    post "getSalesInfo", to: 'users#get_sales_info'
     #orders
     post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
