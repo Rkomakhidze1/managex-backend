@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_132439) do
+ActiveRecord::Schema.define(version: 2020_12_01_155703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,13 @@ ActiveRecord::Schema.define(version: 2020_11_16_132439) do
     t.decimal "budget", precision: 12, scale: 2
     t.decimal "income_expected", precision: 12, scale: 2
     t.decimal "already_paid", precision: 12, scale: 2, default: "0.0"
+    t.integer "team_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -102,6 +109,9 @@ ActiveRecord::Schema.define(version: 2020_11_16_132439) do
     t.string "tokens", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "team_id"
+    t.string "role"
+    t.string "full_name"
   end
 
 end

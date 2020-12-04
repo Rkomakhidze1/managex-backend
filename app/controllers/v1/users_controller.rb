@@ -2,12 +2,16 @@ class V1::UsersController < ApplicationController
     before_action :authorized, except: [:login]
     
     def login
-        user = User.find_by! username: user_params[:username]
-        if user.authenticate user_params[:password]
+        user = User.find_by! username: login_params[:username]
+        team = Team.find_by! id: user.team_id
+        projects = team.projects.map{|p| {id: p.id, name: p.name}}
+        users = team.users.filter{|u| u.id != user.id}
+
+        if user.authenticate login_params[:password]
             token = encode_token({user_id: user.id})
             user.tokens.push token
             if user.save
-                render json: {success: true, user: user, token: token}, status: :ok
+                render json: {success: true, user: user, projects: projects, users: users, token: token}, status: :ok
             else
                 
             end
@@ -24,7 +28,10 @@ class V1::UsersController < ApplicationController
     end
 
     def me
-        render json: {success: true, user: @user}, status: :ok
+        team = Team.find_by! id: @user.team_id
+        projects = team.projects.map{|p| {id: p.id, name: p.name}}
+        users = team.users.filter{|u| u.id != @user.id}
+        render json: {success: true, user: @user, projects: projects, users: users}, status: :ok
     end
 
     def get_clients
@@ -44,10 +51,48 @@ class V1::UsersController < ApplicationController
         render json: {success: true, parkings: parkings.count, apartments: apartments.count, full_space: full_space}
     end
 
+    def update_profile
+        team = Team.find_by! id: @user.team_id
+        projects = team.projects.map{|p| {id: p.id, name: p.name}}
+        users = team.users.filter{|u| u.id != @user.id}
+
+        @user.email = user_params[:email]
+        @user.username = user_params[:username]
+        if user_params[:password]
+            @user.password = user_params[:password]
+        end
+
+        if @user.save
+            render json:{success: true, user: @user, projects: projects, users: users}, status: :ok
+        else
+            render json:{success:false, message: err_msg(@user)}, status: :bad_request
+        end
+    end 
+
+    def change_role
+        if @user.role != 'admin'
+          return render json:{success: false, message: "not allowed"}, status: :forbidden
+        end
+        target_user = User.find_by! username: user_params[:username]
+        target_user.role = user_params[:role]
+
+        if target_user.save
+            render json:{success: true, message: "changes saved"}, status: :ok
+        else
+            render json: {success: false, message: err_msg(target_user)}
+        end
+
+    end
+
+
     private
 
+    def login_params
+        params.permit(:username, :password)
+    end
+
     def user_params
-        params.permit(:password, :username, :email, :project_id)
+        params.permit(:username, :email, :password, :project_id, :role)
     end
 
 end
