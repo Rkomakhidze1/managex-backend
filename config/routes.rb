@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     # projects
     post "getProject", to: 'projects#get'
-    post "getAlreadyPaid", to: 'projects#get_alredy_paid'
+    post "getAlreadyPaid", to: 'projects#get_already_paid'
     #users
     post "login", to: 'users#login'
     post "signup", to: 'users#signup'
@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     post "test", to: 'users#test'
     post "getClientsForUser", to: 'users#get_clients'
     post "getSalesInfo", to: 'users#get_sales_info'
+    post "updateProfile", to: 'users#update_profile'
+    post "changeRole", to: 'users#change_role'
     #orders
     post "createOrder", to: 'orders#create' 
     post "getOrders", to: 'orders#get'
